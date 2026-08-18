@@ -61,3 +61,14 @@ Generate charts:
 
 Run the dashboard:
               python app.py
+
+## Project Screenshots
+
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Sales Analytics
+![Sales Analytics](screenshots/sales_analytics.png)
+
+### Future Sales Prediction
+![Future Sales Prediction](screenshots/future_sales_prediction.png)
