@@ -65,10 +65,10 @@ Run the dashboard:
 ## 📸 Project Screenshots
 
 ### Dashboard
-<img src="screenshots/dashboard.png" alt="Dashboard">
+![Dashboard](https://raw.githubusercontent.com/madhesh141216-lang/Supermarket-Sales-Analysis/main/screenshots/dashboard.png)
 
 ### Sales Analytics
-<img src="screenshots/sales_analytics.png" alt="Sales Analytics">
+![Sales Analytics](https://raw.githubusercontent.com/madhesh141216-lang/Supermarket-Sales-Analysis/main/screenshots/sales_analytics.png)
 
 ### Future Sales Prediction
-<img src="screenshots/future_sales_prediction.png" alt="Future Sales Prediction">
+![Future Sales Prediction](https://raw.githubusercontent.com/madhesh141216-lang/Supermarket-Sales-Analysis/main/screenshots/future_sales_prediction.png)
