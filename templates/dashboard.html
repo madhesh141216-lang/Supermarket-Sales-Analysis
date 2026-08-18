@@ -1,0 +1,384 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supermarket Sales Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ </head>
+ 
+<body>
+
+
+    <div class="container">
+
+        <header class="dashboard-header">
+
+            <h1>
+                <i class="fa-solid fa-chart-line"></i>
+                Supermarket Sales Dashboard
+            </h1>
+
+            <p>
+                Sales Performance & Business Analytics Overview
+            </p>
+
+        </header>
+        
+        <div class="section-title">
+            <h2>📊 Key Performance Indicators</h2>
+        </div>
+            <form method="GET" class="filter-form">
+                <select name="branch" onchange="this.form.submit()">
+                    <option value="All">All Branches</option>
+
+                    {% for branch in branches %}
+                        <option value="{{ branch }}"
+                            {% if request.args.get('branch', 'All') == branch %}selected{% endif %}>
+                            {{ branch }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+
+                <select name="city" onchange="this.form.submit()">
+                    <option value="All">All Cities</option>
+
+                    {% for city in cities %}
+                        <option value="{{ city }}"
+                            {% if request.args.get('city', 'All') == city %}selected{% endif %}>
+                            {{ city }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+
+        <section class="cards">
+
+            <div class="card">
+                <span class="card-label">Revenue</span>
+                <h2>Sales Revenue</h2>
+                <p>₹{{ total_sales }}</p>
+            </div>
+
+            <div class="card">
+                <span class="card-label">Orders</span>
+                <h2>Transactions</h2>
+                <p>{{ total_transactions }}</p>
+            </div>
+
+            <div class="card">
+                <span class="card-label">Customer</span>
+                <h2>Avg. Rating</h2>
+                <p>{{ average_rating }}</p>
+            </div>
+
+            <div class="card">
+                <span class="card-label">Network</span>
+                <h2>Branches</h2>
+                <p>{{ total_branches }}</p>
+            </div>
+
+            <div class="card">
+                <span class="card-label">Maximum</span>
+                <h2>Peak Sale</h2>
+                <p>₹{{ highest_sale }}</p>
+            </div>
+
+            <div class="card">
+                <span class="card-label">Minimum</span>
+                <h2>Lowest Sale</h2>
+                <p>₹{{ lowest_sale }}</p>
+            </div>
+
+        </section>
+
+
+        <section class="insights">
+
+            <div class="section-title">
+                <h2>🤖 AI Business Insights</h2>
+            </div>
+
+            <div class="insight-card">
+                <h3>
+                    <i class="fa-solid fa-lightbulb"></i>
+                    Automatic Sales Insight
+                </h3>
+
+                <p>{{ sales_insight }}</p>
+            </div>
+
+            <div class="insight-card">
+                <h3>
+                    <i class="fa-solid fa-chart-column"></i>
+                    Automatic Quantity Insight
+                </h3>
+
+                <p>{{ quantity_insight }}</p>
+            </div>
+
+            <div class="insight-card">
+                <h3>
+                    <i class="fa-solid fa-star"></i>
+                    Automatic Rating Insight
+                </h3>
+
+                <p>{{ rating_insight }}</p>
+            </div>
+
+            <div class="insight-slider">
+
+                <div class="insight-card">
+                    <h3>
+                        <i class="fa-solid fa-trophy"></i>
+                        Highest Selling Product
+                    </h3>
+                     <p>{{ highest_product }}</p>
+                </div>
+
+                <div class="insight-card">
+                    <h3>
+                        <i class="fa-solid fa-building"></i>
+                        Best Performing Branch
+                    </h3>
+                    <p>{{ highest_branch }}</p>
+                </div>
+
+                <div class="insight-card">
+                    <h3>
+                        <i class="fa-solid fa-credit-card"></i>
+                        Most Used Payment
+                    </h3>
+                    <p>{{ popular_payment }}</p>
+                </div>
+
+                <div class="insight-card">
+                    <h3>
+                        <i class="fa-solid fa-location-dot"></i>
+                        Highest Sales City
+                    </h3>
+                    <p>{{ highest_city }}</p>
+                </div>
+
+
+                <div class="insight-card">
+                    <h3>
+                        <i class="fa-solid fa-chart-line"></i>
+                        Best Sales Product
+                    </h3>
+
+                    <p>{{ best_sales_product }}</p>
+                </div>
+
+                <div class="insight-card">
+                    <h3>
+                        <i class="fa-solid fa-box"></i>
+                        Most Sold Product
+                    </h3>
+
+                    <p>{{ best_quantity_product }}</p>
+                </div>
+
+                <div class="insight-card">
+                    <h3>
+                        <i class="fa-solid fa-star"></i>
+                        Highest Rated Product
+                    </h3>
+
+                    <p>{{ best_rating_product }}</p>
+                </div>
+
+            </div>
+
+
+            <section class="prediction-section">
+
+                <h2>🔮 AI Future Sales Prediction</h2>
+
+                <div class="prediction-table-container">
+
+                    <table class="prediction-table">
+
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Predicted Sales</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for prediction in future_sales %}
+
+                            <tr>
+                                <td>{{ prediction["Date"].strftime("%Y-%m-%d") }}</td>
+
+                                <td>
+                                    ₹{{ "{:,.2f}".format(prediction["Predicted_Sales"]) }}
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div class="prediction-chart-container">
+
+                    <h3>Future 7 Days Sales Trend</h3>
+
+                    <img
+                        src="{{ url_for('future_sales_chart') }}"
+                        alt="Future 7 Days Sales Prediction"
+                        class="prediction-chart"
+                    >
+
+                </div>
+
+            </section>
+
+
+        </section>
+
+           <div class="section-title">
+                <h2>Sales Analytics Charts</h2>
+            </div>
+
+        <section class="charts">
+
+             
+            <div class="chart">
+                <h2>Sales by Product</h2>
+               <img src="{{ url_for('sales_product_chart', branch=request.args.get('branch', 'All'),
+                city=request.args.get('city', 'All')) }}"alt="Sales by Product">
+            </div>
+
+             
+            <div class="chart">
+                <h2>Sales by Branch</h2>
+                <img src="{{ url_for('sales_branch_chart',branch=request.args.get('branch', 'All'),
+                 city=request.args.get('city', 'All')) }}" alt="Sales by Branch">
+            </div>
+
+             
+            <div class="chart">
+                <h2>Sales by City</h2>
+                <img src="{{ url_for('sales_city_chart', branch=request.args.get('branch', 'All'),
+                 city=request.args.get('city', 'All')) }}"alt="Sales by City">
+            </div>
+
+             
+            <div class="chart">
+                <h2>Sales by Payment</h2>
+                <img src="{{ url_for('sales_payment_chart', branch=request.args.get('branch', 'All'),
+                 city=request.args.get('city', 'All')) }}"alt="Sales by Payment">
+            </div>
+
+            
+            <div class="chart">
+                <h2>Sales by Gender</h2>
+                <img src="{{ url_for('sales_gender_chart',branch=request.args.get('branch', 'All'),
+                 city=request.args.get('city', 'All')) }}" alt="Sales by Gender">
+            </div>
+
+             
+            <div class="chart">
+                <h2>Sales by Customer Type</h2>
+                <img src="{{ url_for('sales_customer_type_chart',branch=request.args.get('branch', 'All'),
+                city=request.args.get('city', 'All')) }}" alt="Sales by Customer Type">
+            </div>
+
+         
+            <div class="chart">
+                <h2>Average Rating by Product</h2>
+                <img src="{{ url_for('rating_product_chart',branch=request.args.get('branch', 'All'),
+                city=request.args.get('city', 'All')) }}" alt="Average Rating by Product">
+            </div>
+
+             
+            <div class="chart">
+                <h2>Quantity Sold by Product Line</h2>
+                <img src="{{ url_for('quantity_product_chart',branch=request.args.get('branch', 'All'),
+                city=request.args.get('city', 'All')) }}"alt="Quantity Sold by Product Line">
+            </div>
+
+             
+            <div class="chart">
+                <h2>Payment Method Count</h2>
+                <img src="{{ url_for('payment_count_chart',branch=request.args.get('branch', 'All'),
+                city=request.args.get('city', 'All')) }}"alt="Payment Method Count">
+            </div>
+
+             
+            <div class="chart">
+                <h2>Gender Distribution</h2>
+                <img src="{{ url_for('gender_count_chart',branch=request.args.get('branch', 'All'),
+                city=request.args.get('city', 'All')) }}"alt="Gender Distribution">
+            </div>
+
+             
+            <div class="chart">
+                <h2>Top 5 Products by Sales</h2>
+                <img src="{{ url_for('top5_products_chart',branch=request.args.get('branch', 'All'),
+                city=request.args.get('city', 'All')) }}"alt="Top 5 Products by Sales">
+            </div>
+
+             
+            <div class="chart">
+                <h2>Daily Sales Trend</h2>
+                <img src="{{ url_for('daily_sales_chart',branch=request.args.get('branch', 'All'),
+                city=request.args.get('city', 'All')) }}"alt="Daily Sales Trend">
+            </div>
+
+             
+            <div class="chart">
+                <h2>Correlation Analysis</h2>
+                <img src="{{ url_for('correlation_chart',branch=request.args.get('branch', 'All'),
+                city=request.args.get('city', 'All')) }}" alt="Correlation Analysis">
+            </div>
+
+            <div class="chart">
+                <h2>Monthly Sales Trend</h2>
+                <img src="{{ url_for('monthly_sales_chart',branch=request.args.get('branch', 'All'),
+                city=request.args.get('city', 'All')) }}"alt="Monthly Sales Trend">
+            </div>
+
+        </section> 
+        
+        <div class="chart">
+            <h2>Customer Type Sales Comparison</h2>
+            <img src="{{ url_for('customer_type_sales_chart',branch=request.args.get('branch', 'All'),
+             city=request.args.get('city', 'All')) }}"alt="Customer Type Sales Comparison">
+        </div>
+
+        <div class="chart">
+            <h2>Customer Type Quantity Comparison</h2>
+
+            <img src="{{ url_for('customer_type_quantity_chart',branch=request.args.get('branch', 'All'),
+            city=request.args.get('city', 'All')) }}"alt="Customer Type Quantity Comparison">
+        </div>
+
+        <div class="chart">
+            <h2>Sales by Customer Type and Gender</h2>
+
+            <img src="{{ url_for('customer_gender_sales_chart', branch=request.args.get('branch', 'All'),
+            city=request.args.get('city', 'All')) }}"alt="Sales by Customer Type and Gender">
+        </div>
+
+
+        <div class="chart">
+            <h2>Sales vs Quantity</h2>
+
+            <img src="{{ url_for('sales_vs_quantity_chart',branch=request.args.get('branch', 'All'),
+            city=request.args.get('city', 'All')) }}"alt="Sales vs Quantity">
+        </div>
+   </div>
+
+</body>
+
+</html>
