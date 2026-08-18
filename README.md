@@ -4,7 +4,7 @@ A data analytics and machine learning project that analyzes supermarket sales, c
 
 It also predicts the next 7 days of sales using a Gradient Boosting Regressor.
 
-## 🚀 Features
+## 🚀 Features          
 
 - 📊 Sales & Product Analysis
 - 👥 Customer Behavior Analysis
