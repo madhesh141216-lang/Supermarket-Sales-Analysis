@@ -25,33 +25,122 @@
             </p>
 
         </header>
+
+
+
+        <div class="upload-section">
+            <h2><span class="upload-icon">▣</span> Upload Sales Dataset</h2>
+
+           <form method="POST"action="{{ url_for('upload_file') }}"enctype="multipart/form-data">
+
+                <input type="file"name="file"accept=".csv"required>
+
+                <button type="submit">Upload CSV</button>
+
+            </form>
+
+            <form method="GET">
+
+                <select name="dataset" onchange="this.form.submit()">
+
+                    <option value="default"
+                        {% if selected_dataset == "default" %}
+                            selected
+                        {% endif %}>
+                        Default Dataset
+                    </option>
+
+                    {% for file in upload_files %}
+
+                        <option value="{{ file }}"
+                            {% if selected_dataset == file %}
+                                selected
+                            {% endif %}>
+                            {{ file }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </form>
+
+            {% if selected_dataset == "default" %}
+                <p class="current-dataset">
+                    📊 Current Dataset: <strong>Default Dataset</strong>
+                </p>
+            {% else %}
+                <p class="current-dataset">
+                    📊 Current Dataset: <strong>{{ selected_dataset }}</strong>
+                </p>
+            {% endif %}
+
+            {% if upload_error %}
+                <p class="upload-error">{{ upload_error }}</p>
+            {% endif %}
+
+            {% if upload_success %}
+                <p class="upload-success">{{ upload_success }}</p>
+            {% endif %}
+        </div>
         
         <div class="section-title">
             <h2>📊 Key Performance Indicators</h2>
         </div>
             <form method="GET" class="filter-form">
+
+                <!-- Keep selected dataset -->
+                <input
+                    type="hidden"
+                    name="dataset"
+                    value="{{ selected_dataset }}"
+                >
+
+                <!-- Branch Filter -->
                 <select name="branch" onchange="this.form.submit()">
-                    <option value="All">All Branches</option>
+
+                    <option value="All">
+                        All Branches
+                    </option>
 
                     {% for branch in branches %}
-                        <option value="{{ branch }}"
-                            {% if request.args.get('branch', 'All') == branch %}selected{% endif %}>
+
+                        <option
+                            value="{{ branch }}"
+                            {% if request.args.get('branch', 'All') == branch %}
+                                selected
+                            {% endif %}
+                        >
                             {{ branch }}
                         </option>
+
                     {% endfor %}
+
                 </select>
 
 
+                <!-- City Filter -->
                 <select name="city" onchange="this.form.submit()">
-                    <option value="All">All Cities</option>
+
+                    <option value="All">
+                        All Cities
+                    </option>
 
                     {% for city in cities %}
-                        <option value="{{ city }}"
-                            {% if request.args.get('city', 'All') == city %}selected{% endif %}>
+
+                        <option
+                            value="{{ city }}"
+                            {% if request.args.get('city', 'All') == city %}
+                                selected
+                            {% endif %}
+                        >
                             {{ city }}
                         </option>
+
                     {% endfor %}
+
                 </select>
+
             </form>
 
         <section class="cards">
@@ -228,19 +317,14 @@
 
                 </div>
 
-                <div class="prediction-chart-container">
+                <div class="chart-card future-sales-card">
+                    <h2>Future 7 Days Sales Prediction</h2>
 
-                    <h3>Future 7 Days Sales Trend</h3>
-
-                    <img
-                        src="{{ url_for('future_sales_chart') }}"
-                        alt="Future 7 Days Sales Prediction"
-                        class="prediction-chart"
-                    >
-
-                </div>
-
-            </section>
+                    <div class="future-chart-container">
+                        <img src="{{ url_for('future_sales_chart', dataset=selected_dataset) }}">
+                    </div>
+                </div>                  
+           </section>
 
 
         </section>
@@ -259,19 +343,21 @@
             </div>
 
              
-            <div class="chart">
-                <h2>Sales by Branch</h2>
-                <img src="{{ url_for('sales_branch_chart',branch=request.args.get('branch', 'All'),
-                 city=request.args.get('city', 'All')) }}" alt="Sales by Branch">
-            </div>
+            {% if request.args.get('branch', 'All') == 'All' and request.args.get('city', 'All') == 'All' %}
 
-             
-            <div class="chart">
-                <h2>Sales by City</h2>
-                <img src="{{ url_for('sales_city_chart', branch=request.args.get('branch', 'All'),
-                 city=request.args.get('city', 'All')) }}"alt="Sales by City">
-            </div>
+                <div class="chart">
+                    <h2>Sales by Branch</h2>
+                    <img src="{{ url_for('sales_branch_chart',branch=request.args.get('branch', 'All'),
+                    city=request.args.get('city', 'All')) }}"alt="Sales by Branch">
+                </div>
 
+                <div class="chart">
+                    <h2>Sales by City</h2>
+                    <img src="{{ url_for('sales_city_chart',branch=request.args.get('branch', 'All'),
+                    city=request.args.get('city', 'All')) }}"alt="Sales by City">
+                </div>
+
+            {% endif %}
              
             <div class="chart">
                 <h2>Sales by Payment</h2>
